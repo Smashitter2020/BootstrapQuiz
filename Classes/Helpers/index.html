@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Bootstrap 5 Helpers Quiz</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" />
+</head>
+<body class="bg-light p-5">
+
+  <div class="container">
+    <h2 class="mb-4">Bootstrap 5 Classes with Helpers Quiz</h2>
+
+    <form id="quizForm"></form>
+    <button type="button" class="btn btn-success mt-3" onclick="submitQuiz()" id="submitBtn"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-lg mb-1 me-1" viewBox="0 0 16 16"><path d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425z"/>
+</svg> Submit Quiz</button>
+    <div id="result" class="alert mt-4 d-none"></div>
+  </div>
+
+  <script>
+    const questions = [
+      {
+        text: "1. Which class is used to keep text and background color contrasting?",
+        options: [
+          { text: ".text-bg-primary", correct: true },
+          { text: ".bg-primary-text", correct: false },
+          { text: ".bg-white-primary", correct: false },
+          { text: ".primary-bg-text", correct: false}
+        ]
+      },
+      {
+        text: "2. Which class is used to create colored links?",
+        options: [
+          { text: ".link-primary", correct: true },
+          { text: ".text-primary", correct: false },
+          { text: ".primary-link", correct: false },
+          { text: ".link-yellow", correct: false }
+        ]
+      },
+      {
+        text: "3. Which class is used when an element is focused using outline?",
+        options: [
+          { text: ".focus-ring", correct: true },
+          { text: ".outline-focus", correct: false },
+          { text: ".focus-auto", correct: false },
+          { text: ".border-focus", correct: false }
+        ]
+      },
+      {
+        text: "4. Which class is used to create positions?",
+        options: [
+          { text: ".fixed-top", correct: true },
+          { text: ".position-top", correct: false },
+          { text: ".position-down", correct: false },
+          { text: ".fixed-auto", correct: false }
+        ]
+      },
+      {
+        text: "5. What is .stretched-link class?",
+        options: [
+          { text: "It makes a link element expand to cover the entire area of its parent container.", correct: true },
+          { text: "It is used to automatically center a link element inside a container using flex utilities.", correct: false },
+          { text: "It converts a regular link into a fixed navigation bar item with active highlighting.", correct: false },
+          { text: "It enables the link to open in a new tab without using the target attribute.", correct: false }
+        ]
+      }
+    ];
+
+    function shuffle(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+    }
+
+    function generateQuiz() {
+      const form = document.getElementById('quizForm');
+      questions.forEach((q, index) => {
+        shuffle(q.options);
+        const block = document.createElement('div');
+        block.className = 'mb-4';
+        const question = document.createElement('p');
+        question.innerHTML = `<strong>${q.text}</strong>`;
+        block.appendChild(question);
+        q.options.forEach((opt, i) => {
+          const id = `q${index}a${i}`;
+          block.innerHTML += `
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="q${index}" value="${opt.correct}" id="${id}">
+              <label class="form-check-label" for="${id}">${opt.text}</label>
+            </div>`;
+        });
+        form.appendChild(block);
+      });
+    }
+
+    function submitQuiz() {
+      const answers = document.querySelectorAll('input[type="radio"]:checked');
+      let score = 0;
+      answers.forEach(input => {
+        if (input.value === "true") score++;
+      });
+      document.getElementById("submitBtn").classList.add("d-none");
+      document.getElementById("quizForm").classList.add("d-none");
+      const resultBox = document.getElementById("result");
+      resultBox.textContent = `You scored ${score} out of ${questions.length} points.`;
+      resultBox.className = "alert mt-4 " + (score >= 3 ? "alert-success" : "alert-danger");
+      resultBox.classList.remove("d-none");
+    }
+
+    window.onload = generateQuiz;
+  </script>
+</body>
+</html>
