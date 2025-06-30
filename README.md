@@ -1,2 +1,2 @@
 # BootstrapQuiz
-A simple quiz used for Bootstrap classes and components.
+Used to try out simple Bootstrap classes and components quiz.
