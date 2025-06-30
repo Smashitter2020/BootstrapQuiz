@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Bootstrap 5 Classes Quiz</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" />
+</head>
+<body class="bg-light p-5">
+
+  <div class="container">
+    <h2 class="mb-4">Bootstrap 5 True or False Quiz</h2>
+    <p class="mb-5 text-secondary">Determine if either statement is true or false.</p>
+
+    <form id="quizForm"></form>
+    <button type="button" class="btn btn-success mt-3" onclick="submitQuiz()" id="submitBtn"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-lg mb-1 me-1" viewBox="0 0 16 16"><path d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425z"/>
+</svg> Submit Quiz</button>
+    <div id="result" class="alert mt-4 d-none"></div>
+  </div>
+
+  <script>
+    const questions = [
+      {
+        text: "1. Can a Bootstrap container used to create responsive sizing on across screen devices?",
+        options: [
+          { text: "True", correct: true },
+          { text: "False", correct: false }
+        ]
+      },
+      {
+        text: "2. Can a Bootstrap link has a class containing .link-opacity-0?",
+        options: [
+          { text: "True", correct: false },
+          { text: "False", correct: true }
+        ]
+      },
+      {
+        text: "3. Does Bootstrap 5 have a sidebar component?",
+        options: [
+          { text: "True", correct: true },
+          { text: "False", correct: false }
+        ]
+      },
+      {
+        text: "4. Does Bootstrap 5 use .bg-primary for blue backgrounds?",
+        options: [
+          { text: "True", correct: true },
+          { text: "False", correct: false }
+        ]
+      },
+      {
+        text: "5. Does Bootstrap 5 include .text-yellow class?",
+        options: [
+          { text: "True", correct: false },
+          { text: "False", correct: true }
+        ]
+      }
+    ];
+
+    function shuffle(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+    }
+
+    function generateQuiz() {
+      const form = document.getElementById('quizForm');
+      questions.forEach((q, index) => {
+        shuffle(q.options);
+        const block = document.createElement('div');
+        block.className = 'mb-4';
+        const question = document.createElement('p');
+        question.innerHTML = `<strong>${q.text}</strong>`;
+        block.appendChild(question);
+        q.options.forEach((opt, i) => {
+          const id = `q${index}a${i}`;
+          block.innerHTML += `
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="q${index}" value="${opt.correct}" id="${id}">
+              <label class="form-check-label" for="${id}">${opt.text}</label>
+            </div>`;
+        });
+        form.appendChild(block);
+      });
+    }
+
+    function submitQuiz() {
+      const answers = document.querySelectorAll('input[type="radio"]:checked');
+      let score = 0;
+      answers.forEach(input => {
+        if (input.value === "true") score++;
+      });
+      document.getElementById("submitBtn").classList.add("d-none");
+      document.getElementById("quizForm").classList.add("d-none");
+      const resultBox = document.getElementById("result");
+      resultBox.textContent = `You scored ${score} out of ${questions.length} points.`;
+      resultBox.className = "alert mt-4 " + (score >= 3 ? "alert-success" : "alert-danger");
+      resultBox.classList.remove("d-none");
+    }
+
+    window.onload = generateQuiz;
+  </script>
+</body>
+</html>
